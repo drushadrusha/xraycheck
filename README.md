@@ -10,6 +10,6 @@ Requiers xray, python3 and curl for correct work.
 # Usage
 
 ```
-./raycheck "vless://..."
+./xraycheck "vless://..."
 
 ```

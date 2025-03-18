@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+cleanup() {
+    if [ -n "${XRAY_PID+x}" ]; then
+        kill $XRAY_PID 2>/dev/null || true
+        rm "$TEMP_CONFIG"
+    fi
+    exit
+}
+if [ "$#" -ne 1 ]; then
+    exit 1
+fi
+CONFIG_URL="$1"
+TEMP_CONFIG="config.json"
+python3 v2ray2json.py "$CONFIG_URL" > "$TEMP_CONFIG"
+xray run -c "$TEMP_CONFIG" >/dev/null 2>&1 &
+XRAY_PID=$!
+sleep 1
+curl -x socks5://127.0.0.1:1080 https://ifconfig.co
+cleanup
